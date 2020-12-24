@@ -1,0 +1,7 @@
+<relations>
+  <relation parent_id="N1" child_id="N3" name="hypernym"/>
+  <relation parent_id="N1" child_id="N4" name="hypernym"/>
+  <relation parent_id="N2" child_id="N3" name="part holonym"/>
+  <relation parent_id="N6" child_id="V4" name="POS-synonymy"/>
+  <relation parent_id="N12" child_id="N30" name="domain"/>
+</relations>
