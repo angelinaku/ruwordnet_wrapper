@@ -1,6 +1,6 @@
 import lxml
 from lxml import etree
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Dict, Union
 
 
 class RuWordNetInfo:
@@ -196,7 +196,7 @@ class RuWordNetInfo:
         else:
             return ['No such synset in the thesaurus']
 
-    def show_synonyms(self, word: str) -> Optional[List[Dict], str]:
+    def show_synonyms(self, word: str) -> Union[List[Dict], str]:
 
         """
         Extract synonyms for a given word
@@ -242,7 +242,7 @@ class RuWordNetInfo:
             return {}
 
     def show_synset_relations_with_words(self, synset_number: str, print_synsets: bool = False,
-                                         relations: Optional[List[str], str] = 'all') -> Dict:
+                                         relations: Union[List[str], str] = 'all') -> Dict:
         """
         Show the words that are connected to a synset with particular relations (only the closest relations)
         :param synset_number: synset id
@@ -290,7 +290,7 @@ class RuWordNetInfo:
                           relation in relatives_dict_words}
             return final_dict
 
-    def show_word_closest_relatives(self, word: str, synset: str = '', relations: Optional[List[str], str] = 'all',
+    def show_word_closest_relatives(self, word: str, synset: str = '', relations: Union[List[str], str] = 'all',
                                     print_synsets: bool = False):
         """
         Extract the most closely related words for the given word
@@ -334,4 +334,72 @@ class RuWordNetInfo:
             else:
                 relatives = {}
         return relatives
+
+    def extract_polysesmous_words(self, pos: str = 'Noun', output: str = 'lemmas') -> List:
+        """
+        Extract list of polysemous words for a given part of speech
+        :param pos: part of speech tag, possible tags: Noun, Verb, Adj
+        :param output: type of the output - lemmas or unlemmatized words
+        :return: list of polysemous words
+        """
+
+        poly_words = []
+
+        if pos == 'Noun':
+            senses = self.senses_N
+        elif pos == 'Verb':
+            senses = self.senses_V
+        elif pos == 'Adj':
+            senses = self.senses_A
+        else:
+            print('Invalid POS-tag')
+            return []
+
+        for child in senses:
+
+            mean = child.attrib['meaning']
+
+            if output == 'lemmas':
+                name = child.attrib['lemma'].lower()
+            else:
+                name = child.attrib['name'].lower()
+
+            if name not in poly_words and mean != '1':
+                poly_words.append(name)
+
+        return poly_words
+
+    def extract_monosesmous_words(self, pos: str = 'Noun', output: str = 'lemmas') -> List:
+        """
+        Extract list of monosemous words for a given part of speech
+        :param pos: part of speech tag, possible tags: Noun, Verb, Adj
+        :param output: type of the output - lemmas or unlemmatized words
+        :return: list of monosemous words
+        """
+
+        mono_words = []
+
+        if pos == 'Noun':
+            senses = self.senses_N
+        elif pos == 'Verb':
+            senses = self.senses_V
+        elif pos == 'Adj':
+            senses = self.senses_A
+        else:
+            print('Invalid POS-tag')
+            return []
+
+        for child in senses:
+
+            mean = child.attrib['meaning']
+
+            if output == 'lemmas':
+                name = child.attrib['lemma'].lower()
+            else:
+                name = child.attrib['name'].lower()
+
+            if name not in mono_words and mean == '1':
+                mono_words.append(name)
+
+        return mono_words
 
