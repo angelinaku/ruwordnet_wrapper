@@ -47,3 +47,9 @@ ruw.show_synset_relations_with_words('N12658', relations='all')
 ```
 ruw.show_word_closest_relatives('лук', relations=['hypernym'], print_synsets=True)
 ```
+
+* Obtain a list of polysemous/monosemous words for a given part of speech:
+```
+ruw.extract_polysesmous_words('Noun')
+ruw.extract_monosesmous_words('Verb')
+```
