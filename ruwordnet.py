@@ -1,5 +1,6 @@
 import lxml
 from lxml import etree
+from tqdm import tqdm_notebook
 from typing import List, Tuple, Dict, Union
 
 
@@ -355,7 +356,7 @@ class RuWordNetInfo:
             print('Invalid POS-tag')
             return []
 
-        for child in senses:
+        for child in tqdm_notebook(senses):
 
             mean = child.attrib['meaning']
 
@@ -389,7 +390,7 @@ class RuWordNetInfo:
             print('Invalid POS-tag')
             return []
 
-        for child in senses:
+        for child in tqdm_notebook(senses):
 
             mean = child.attrib['meaning']
 
